@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'korisnici'; // Naziv tabele u bazi
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,7 +22,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'alergije', // JSON polje za alergene
+        'dijetetske_preferencije', // JSON polje za dijetetske preferencije
     ];
+
+    public function planoviObroka()
+    {
+        return $this->hasMany(PlanObroka::class);
+    }
 
     /**
      * The attributes that should be hidden for arrays.

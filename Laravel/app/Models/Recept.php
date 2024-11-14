@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Recept extends Model
 {
     use HasFactory;
+
+    protected $table = 'recepti'; // Naziv tabele u bazi
+
+    protected $fillable = [
+        'naziv',
+        'opis',
+        'sastojci',          // JSON polje za listu sastojaka
+        'nutritivne_vrednosti', // JSON polje za kalorije, proteine itd.
+    ];
+
+    public function stavkePlana()
+    {
+        return $this->hasMany(StavkaPlana::class);
+    }
 }
