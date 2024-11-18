@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlanObrokaController;
 use App\Http\Controllers\ReceptController;
 use App\Http\Controllers\StavkaPlanaController;
 use Illuminate\Http\Request;
@@ -34,4 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/stavke-plana', [StavkaPlanaController::class, 'store']);
     Route::put('/stavke-plana/{id}', [StavkaPlanaController::class, 'update']);
     Route::delete('/stavke-plana/{id}', [StavkaPlanaController::class, 'destroy']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('planovi-obroka', PlanObrokaController::class);
 });
