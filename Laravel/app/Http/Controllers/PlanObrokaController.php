@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PlanObrokaResource;
 use App\Models\PlanObroka;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class PlanObrokaController extends Controller
@@ -93,9 +94,18 @@ class PlanObrokaController extends Controller
      */
     public function show($id)
     {
-        $plan = PlanObroka::where('id', $id)
-        ->where('korisnik_id', auth()->id())
-        ->firstOrFail();
+        $user = auth()->user(); // Preuzimanje ulogovanog korisnika
+
+        // Kreiranje ključa za keširanje na osnovu korisnika i ID-ja plana
+        $cacheKey = "plan_obroka_{$user->id}_{$id}";
+    
+        // Dohvatanje plana iz keša ili baze, cuva se 10 minuta
+        $plan = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($id, $user) {
+            return PlanObroka::where('id', $id)
+                             ->where('korisnik_id', $user->id)
+                             ->firstOrFail();
+        });
+    
         return response()->json(new PlanObrokaResource($plan), 200);
     }
 
