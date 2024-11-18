@@ -15,11 +15,43 @@ class PlanObrokaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user(); // Preuzimanje ulogovanog korisnika
-        $planovi = PlanObroka::where('korisnik_id', $user->id)->get();
-        return response()->json(PlanObrokaResource::collection($planovi), 200);
+    
+        // Preuzimanje filtera iz upita
+        $naziv = $request->input('naziv'); // Filtriranje po nazivu
+        $period_od = $request->input('period_od'); // Filtriranje po početnom datumu
+        $period_do = $request->input('period_do'); // Filtriranje po završnom datumu
+    
+        // Query sa filtriranjem
+        $query = PlanObroka::where('korisnik_id', $user->id);
+    
+        if ($naziv) {
+            $query->where('naziv', 'LIKE', "%$naziv%");
+        }
+    
+        if ($period_od) {
+            $query->where('period_od', '>=', $period_od);
+        }
+    
+        if ($period_do) {
+            $query->where('period_do', '<=', $period_do);
+        }
+    
+        // Paginacija
+        $planovi = $query->paginate(10); // 10 planova po stranici
+    
+        // Vraćanje resursa sa paginacijom
+        return response()->json([
+            'data' => PlanObrokaResource::collection($planovi),
+            'pagination' => [
+                'current_page' => $planovi->currentPage(),
+                'last_page' => $planovi->lastPage(),
+                'per_page' => $planovi->perPage(),
+                'total' => $planovi->total(),
+            ],
+        ], 200);
     }
 
 
