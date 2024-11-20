@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PlanObrokaController;
 use App\Http\Controllers\ReceptController;
 use App\Http\Controllers\StavkaPlanaController;
@@ -45,3 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('planovi-obroka', PlanObrokaController::class);
 });
+
+
+// resetovanje lozinke
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
+Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
