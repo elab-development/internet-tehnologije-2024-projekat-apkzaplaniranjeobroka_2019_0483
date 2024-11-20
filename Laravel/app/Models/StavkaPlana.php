@@ -9,7 +9,7 @@ class StavkaPlana extends Model
 {
     use HasFactory;
 
-    protected $table = 'stavke_plana'; // Naziv tabele u bazi
+    protected $table = 'stavka_planas'; // Naziv tabele u bazi
 
     protected $fillable = [
         'plan_obroka_id', // Strani ključ koji povezuje stavku sa planom obroka

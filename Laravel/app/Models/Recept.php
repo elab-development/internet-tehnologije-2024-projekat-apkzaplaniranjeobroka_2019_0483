@@ -9,7 +9,7 @@ class Recept extends Model
 {
     use HasFactory;
 
-    protected $table = 'recepti'; // Naziv tabele u bazi
+    protected $table = 'recepts'; // Naziv tabele u bazi
 
     protected $fillable = [
         'naziv',

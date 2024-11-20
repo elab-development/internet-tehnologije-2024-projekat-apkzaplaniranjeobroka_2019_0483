@@ -9,7 +9,7 @@ class PlanObroka extends Model
 {
     use HasFactory;
 
-    protected $table = 'planovi_obroka'; // Naziv tabele u bazi
+    protected $table = 'plan_obrokas'; // Naziv tabele u bazi
 
     protected $fillable = [
         'korisnik_id', // Strani ključ koji povezuje plan sa korisnikom

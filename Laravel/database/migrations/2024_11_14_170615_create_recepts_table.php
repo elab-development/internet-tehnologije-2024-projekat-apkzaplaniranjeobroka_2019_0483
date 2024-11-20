@@ -15,7 +15,11 @@ class CreateReceptsTable extends Migration
     {
         Schema::create('recepts', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('naziv'); 
+            $table->text('opis')->nullable(); 
+            $table->json('sastojci'); // JSON polje za listu sastojaka
+            $table->json('nutritivne_vrednosti')->nullable(); // JSON polje za nutritivne vrednosti
+            $table->timestamps(); 
         });
     }
 

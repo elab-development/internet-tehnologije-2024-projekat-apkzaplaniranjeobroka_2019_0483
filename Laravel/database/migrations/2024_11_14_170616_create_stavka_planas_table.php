@@ -14,8 +14,12 @@ class CreateStavkaPlanasTable extends Migration
     public function up()
     {
         Schema::create('stavka_planas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); 
+            $table->foreignId('plan_obroka_id')->constrained('plan_obrokas')->onDelete('cascade'); 
+            $table->foreignId('recept_id')->constrained('recepts')->onDelete('cascade');
+            $table->date('datum');
+            $table->string('tip_obroka');
+            $table->timestamps(); 
         });
     }
 

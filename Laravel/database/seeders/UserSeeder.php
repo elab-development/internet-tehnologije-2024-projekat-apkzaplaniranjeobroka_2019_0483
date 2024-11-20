@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Recept;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class ReceptSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class ReceptSeeder extends Seeder
      */
     public function run()
     {
-        Recept::factory()->count(30)->create();
+        User::factory()->count(10)->create();
     }
 }

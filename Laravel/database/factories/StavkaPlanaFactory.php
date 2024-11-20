@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\PlanObroka;
+use App\Models\Recept;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class StavkaPlanaFactory extends Factory
@@ -14,7 +16,10 @@ class StavkaPlanaFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'plan_obroka_id' => PlanObroka::factory(), 
+            'recept_id' => Recept::factory(),
+            'datum' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
+            'tip_obroka' => $this->faker->randomElement(['Doručak', 'Ručak', 'Večera']),
         ];
     }
 }

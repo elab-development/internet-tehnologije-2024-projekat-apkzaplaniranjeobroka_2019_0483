@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PlanObroka;
 use Illuminate\Database\Seeder;
 
 class PlanObrokaSeeder extends Seeder
@@ -13,6 +14,6 @@ class PlanObrokaSeeder extends Seeder
      */
     public function run()
     {
-        //
+        PlanObroka::factory()->count(20)->create();
     }
 }

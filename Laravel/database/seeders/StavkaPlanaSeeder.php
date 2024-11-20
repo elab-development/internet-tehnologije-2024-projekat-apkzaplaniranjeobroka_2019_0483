@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\StavkaPlana;
 use Illuminate\Database\Seeder;
 
 class StavkaPlanaSeeder extends Seeder
@@ -13,6 +14,6 @@ class StavkaPlanaSeeder extends Seeder
      */
     public function run()
     {
-        //
+        StavkaPlana::factory()->count(50)->create();
     }
 }

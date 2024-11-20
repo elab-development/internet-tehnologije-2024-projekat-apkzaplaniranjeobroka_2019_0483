@@ -14,8 +14,12 @@ class CreatePlanObrokasTable extends Migration
     public function up()
     {
         Schema::create('plan_obrokas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); 
+            $table->foreignId('korisnik_id')->constrained('users')->onDelete('cascade'); 
+            $table->string('naziv'); 
+            $table->date('period_od'); 
+            $table->date('period_do'); 
+            $table->timestamps(); 
         });
     }
 
