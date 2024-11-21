@@ -106,4 +106,38 @@ class ReceptController extends Controller
 
         return response()->json(['message' => 'Recept je uspešno obrisan.'], 200);
     }
+
+    public function search(Request $request)
+    {
+        
+        $naziv = $request->input('naziv');
+        $sastojci = $request->input('sastojci');
+        $kalorije_od = $request->input('kalorije_od');
+        $kalorije_do = $request->input('kalorije_do');
+
+        $query = Recept::query();
+
+        if ($naziv) {
+            $query->where('naziv', 'like', "%$naziv%");
+        }
+
+        if ($sastojci) {
+            $query->whereJsonContains('sastojci', $sastojci);
+        }
+
+        if ($kalorije_od || $kalorije_do) {
+            $query->where(function ($subquery) use ($kalorije_od, $kalorije_do) {
+                if ($kalorije_od) {
+                    $subquery->whereJsonContains('nutritivne_vrednosti->kalorije', '>=', $kalorije_od);
+                }
+                if ($kalorije_do) {
+                    $subquery->whereJsonContains('nutritivne_vrednosti->kalorije', '<=', $kalorije_do);
+                }
+            });
+        }
+
+        $recepti = $query->paginate(10);
+
+        return response()->json($recepti, 200);
+    }
 }

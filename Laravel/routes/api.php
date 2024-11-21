@@ -27,13 +27,17 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/recepti', [ReceptController::class, 'index']);
     Route::get('/recepti/{id}', [ReceptController::class, 'show']);
     Route::post('/recepti', [ReceptController::class, 'store']);
     Route::put('/recepti/{id}', [ReceptController::class, 'update']);
     Route::delete('/recepti/{id}', [ReceptController::class, 'destroy']);
+    Route::get('/pretragarecepata', [ReceptController::class, 'search']);
 });
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/stavke-plana', [StavkaPlanaController::class, 'index']);
