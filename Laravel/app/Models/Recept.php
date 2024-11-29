@@ -16,6 +16,7 @@ class Recept extends Model
         'opis',
         'sastojci',          // JSON polje za listu sastojaka
         'nutritivne_vrednosti', // JSON polje za kalorije, proteine itd.
+        'file_path', // Dodato za čuvanje putanje fajla
     ];
 
     public function stavkePlana()

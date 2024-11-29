@@ -140,4 +140,37 @@ class ReceptController extends Controller
 
         return response()->json($recepti, 200);
     }
+
+    public function addFile(Request $request, $id)
+    {
+        // Validacija fajla
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', // Dozvoljeni formati i veličina
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Pronađi recept
+        $recept = Recept::findOrFail($id);
+
+        // Čuvanje fajla
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filePath = $file->store('uploads', 'public'); // Čuvanje u storage/app/public/uploads
+
+            // Ažuriraj recept sa putanjom fajla
+            $recept->update(['file_path' => $filePath]);
+
+            // Vraćanje odgovora sa URL-om slike
+            return response()->json([
+                'message' => 'Fajl je uspešno dodat receptu.',
+                'recept' => $recept,
+                'file_url' => asset('storage/' . $filePath),
+            ], 200);
+        }
+
+        return response()->json(['message' => 'Fajl nije uploadovan.'], 500);
+    }
 }

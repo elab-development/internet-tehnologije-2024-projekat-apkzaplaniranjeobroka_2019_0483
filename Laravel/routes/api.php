@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/recepti/{id}', [ReceptController::class, 'update']);
     Route::delete('/recepti/{id}', [ReceptController::class, 'destroy']);
     Route::get('/pretragarecepata', [ReceptController::class, 'search']);
+    Route::post('/recepti/addFile/{id}', [ReceptController::class, 'addFile']);
 });
 
 
