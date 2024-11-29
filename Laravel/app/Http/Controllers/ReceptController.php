@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ReceptResource;
 use App\Models\Recept;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -193,5 +194,45 @@ class ReceptController extends Controller
         ];
 
         return Response::make($csvData, 200, $headers);
+    }
+
+    public function getNutritiveInfo(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|max:255', // Pretraga po nazivu proizvoda ili barkodu
+        ]);
+
+        $query = urlencode($request->input('query'));
+
+        $apiUrl = "https://world.openfoodfacts.org/cgi/search.pl?search_terms={$query}&search_simple=1&json=1";
+
+        try {
+            $response = Http::get($apiUrl);
+
+            if ($response->failed()) {
+                return response()->json(['error' => 'Nije moguće preuzeti podatke za zadati upit.'], 404);
+            }
+
+            $data = $response->json();
+
+            // Provera da li ima rezultata
+            if (empty($data['products'])) {
+                return response()->json(['error' => 'Nema rezultata za zadati upit.'], 404);
+            }
+
+            // Obrada rezultata
+            $products = collect($data['products'])->map(function ($product) {
+                return [
+                    'ime' => $product['product_name'] ?? 'N/A',
+                    'brend' => $product['brands'] ?? 'N/A',
+                    'nutritivne_vrednosti' => $product['nutriments'] ?? [],
+                    'slika' => $product['image_url'] ?? 'N/A',
+                ];
+            });
+
+            return response()->json($products, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Došlo je do greške prilikom preuzimanja podataka.'], 500);
+        }
     }
 }

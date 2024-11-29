@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/pretragarecepata', [ReceptController::class, 'search']);
     Route::post('/recepti/addFile/{id}', [ReceptController::class, 'addFile']);
     Route::get('/recepti/export/csv', [ReceptController::class, 'exportCsv']);
+    Route::get('/proizvodi/pretraga', [ReceptController::class, 'getNutritiveInfo']);
 });
 
 
