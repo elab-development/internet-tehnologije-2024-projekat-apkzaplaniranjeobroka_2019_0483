@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ReceptResource;
 use App\Models\Recept;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class ReceptController extends Controller
@@ -172,5 +173,25 @@ class ReceptController extends Controller
         }
 
         return response()->json(['message' => 'Fajl nije uploadovan.'], 500);
+    }
+
+    public function exportCsv()
+    {
+        $recepti = Recept::all();
+
+        $csvData = "ID,Naziv,Opis,Sastojci\n";
+
+        foreach ($recepti as $recept) {
+            $csvData .= "{$recept->id},\"{$recept->naziv}\",\"{$recept->opis}\",\"{$recept->sastojci}\"\n";
+        }
+
+        $fileName = 'recepti_' . now()->format('Y_m_d_H_i_s') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$fileName\"",
+        ];
+
+        return Response::make($csvData, 200, $headers);
     }
 }
