@@ -25,22 +25,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/pretragarecepata', [ReceptController::class, 'search']);
+
+
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/recepti', [ReceptController::class, 'index']);
-    Route::get('/recepti/{id}', [ReceptController::class, 'show']);
-    Route::post('/recepti', [ReceptController::class, 'store']);
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/recepti/{id}', [ReceptController::class, 'update']);
     Route::delete('/recepti/{id}', [ReceptController::class, 'destroy']);
-    Route::get('/pretragarecepata', [ReceptController::class, 'search']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/recepti', [ReceptController::class, 'store']);
+    Route::get('/recepti', [ReceptController::class, 'index']);
+    Route::get('/recepti/{id}', [ReceptController::class, 'show']);
     Route::post('/recepti/addFile/{id}', [ReceptController::class, 'addFile']);
     Route::get('/recepti/export/csv', [ReceptController::class, 'exportCsv']);
     Route::get('/proizvodi/pretraga', [ReceptController::class, 'getNutritiveInfo']);
 });
-
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/stavke-plana', [StavkaPlanaController::class, 'index']);

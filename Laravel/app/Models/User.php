@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
         'alergije', // JSON polje za alergene
         'dijetetske_preferencije', // JSON polje za dijetetske preferencije
     ];
