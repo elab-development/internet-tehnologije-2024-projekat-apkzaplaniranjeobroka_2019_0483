@@ -9,13 +9,13 @@ class PlanObroka extends Model
 {
     use HasFactory;
 
-    protected $table = 'plan_obrokas'; // Naziv tabele u bazi
+    protected $table = 'plan_obrokas'; 
 
     protected $fillable = [
-        'korisnik_id', // Strani ključ koji povezuje plan sa korisnikom
+        'korisnik_id', 
         'naziv',
-        'period_od', // Datum početka plana
-        'period_do', // Datum završetka plana
+        'period_od',
+        'period_do', 
     ];
 
     public function korisnik()

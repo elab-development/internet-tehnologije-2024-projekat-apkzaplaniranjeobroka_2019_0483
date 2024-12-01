@@ -124,19 +124,22 @@ class ReceptController extends Controller
         }
 
         if ($sastojci) {
-            $query->whereJsonContains('sastojci', $sastojci);
+            foreach ($sastojci as $sastojak) {
+                $query->whereRaw("JSON_KEYS(sastojci) LIKE '%\"$sastojak\"%'");
+            }
         }
-
+        
         if ($kalorije_od || $kalorije_do) {
             $query->where(function ($subquery) use ($kalorije_od, $kalorije_do) {
                 if ($kalorije_od) {
-                    $subquery->whereJsonContains('nutritivne_vrednosti->kalorije', '>=', $kalorije_od);
+                    $subquery->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(nutritivne_vrednosti, '$.kalorije')) AS UNSIGNED) >= ?", [$kalorije_od]);
                 }
                 if ($kalorije_do) {
-                    $subquery->whereJsonContains('nutritivne_vrednosti->kalorije', '<=', $kalorije_do);
+                    $subquery->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(nutritivne_vrednosti, '$.kalorije')) AS UNSIGNED) <= ?", [$kalorije_do]);
                 }
             });
         }
+        
 
         $recepti = $query->paginate(10);
 
@@ -162,7 +165,6 @@ class ReceptController extends Controller
             $file = $request->file('file');
             $filePath = $file->store('uploads', 'public'); // Čuvanje u storage/app/public/uploads
 
-            // Ažuriraj recept sa putanjom fajla
             $recept->update(['file_path' => $filePath]);
 
             // Vraćanje odgovora sa URL-om slike

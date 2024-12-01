@@ -21,9 +21,9 @@ class PlanObrokaController extends Controller
         $user = auth()->user(); // Preuzimanje ulogovanog korisnika
     
         // Preuzimanje filtera iz upita
-        $naziv = $request->input('naziv'); // Filtriranje po nazivu
-        $period_od = $request->input('period_od'); // Filtriranje po početnom datumu
-        $period_do = $request->input('period_do'); // Filtriranje po završnom datumu
+        $naziv = $request->input('naziv'); 
+        $period_od = $request->input('period_od'); 
+        $period_do = $request->input('period_do');
     
         // Query sa filtriranjem
         $query = PlanObroka::where('korisnik_id', $user->id);

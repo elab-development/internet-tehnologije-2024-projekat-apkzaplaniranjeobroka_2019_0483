@@ -9,14 +9,14 @@ class Recept extends Model
 {
     use HasFactory;
 
-    protected $table = 'recepts'; // Naziv tabele u bazi
+    protected $table = 'recepts';
 
     protected $fillable = [
         'naziv',
         'opis',
         'sastojci',          // JSON polje za listu sastojaka
         'nutritivne_vrednosti', // JSON polje za kalorije, proteine itd.
-        'file_path', // Dodato za čuvanje putanje fajla
+        'file_path', 
     ];
 
     public function stavkePlana()

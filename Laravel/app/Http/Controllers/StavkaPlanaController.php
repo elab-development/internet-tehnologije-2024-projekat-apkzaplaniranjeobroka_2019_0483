@@ -31,8 +31,8 @@ class StavkaPlanaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'plan_obroka_id' => 'required|integer|exists:planovi_obroka,id',
-            'recept_id' => 'required|integer|exists:recepti,id',
+            'plan_obroka_id' => 'required|integer|exists:plan_obrokas,id',
+            'recept_id' => 'required|integer|exists:recepts,id',
             'datum' => 'required|date',
             'tip_obroka' => 'required|string|max:255',
         ]);
@@ -81,8 +81,8 @@ class StavkaPlanaController extends Controller
         $stavka = StavkaPlana::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'plan_obroka_id' => 'required|integer|exists:planovi_obroka,id',
-            'recept_id' => 'required|integer|exists:recepti,id',
+            'plan_obroka_id' => 'required|integer|exists:plan_obrokas,id',
+            'recept_id' => 'required|integer|exists:recepts,id',
             'datum' => 'required|date',
             'tip_obroka' => 'required|string|max:255',
         ]);
