@@ -94,7 +94,7 @@ class PlanObrokaController extends Controller
      */
     public function show($id)
     {
-        $user = auth()->user(); // Preuzimanje ulogovanog korisnika
+        $user = auth()->user(); 
 
         // Kreiranje ključa za keširanje na osnovu korisnika i ID-ja plana
         $cacheKey = "plan_obroka_{$user->id}_{$id}";

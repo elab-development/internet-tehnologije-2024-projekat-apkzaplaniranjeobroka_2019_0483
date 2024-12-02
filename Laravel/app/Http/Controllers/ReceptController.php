@@ -217,12 +217,10 @@ class ReceptController extends Controller
 
             $data = $response->json();
 
-            // Provera da li ima rezultata
             if (empty($data['products'])) {
                 return response()->json(['error' => 'Nema rezultata za zadati upit.'], 404);
             }
 
-            // Obrada rezultata
             $products = collect($data['products'])->map(function ($product) {
                 return [
                     'ime' => $product['product_name'] ?? 'N/A',
