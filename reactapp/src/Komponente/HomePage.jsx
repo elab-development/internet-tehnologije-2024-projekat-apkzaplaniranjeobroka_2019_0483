@@ -145,7 +145,7 @@ const HomePage = () => {
       {/* Kontakt forma */}
       <section className="contact-section">
         <h2>Kontaktirajte nas</h2>
-        <p>Imate pitanja, prijedloge ili trebate pomoć? Pošaljite nam poruku!</p>
+        <p>Imate pitanja, predloge ili trebate pomoć? Pošaljite nam poruku!</p>
         <form className="contact-form" onSubmit={handleSubmit}>
           <label>Ime i prezime:</label>
           <input
