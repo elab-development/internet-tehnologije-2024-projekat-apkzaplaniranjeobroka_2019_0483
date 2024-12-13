@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -9,6 +9,19 @@ const HomePage = () => {
   });
   const [charCount, setCharCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
+  const [timer, setTimer] = useState(0);
+  const [isSubmittingAllowed, setIsSubmittingAllowed] = useState(true);
+
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+    } else {
+      setIsSubmittingAllowed(true);
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,11 +50,16 @@ const HomePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Podaci forme:', formData);
-      alert('Vaša poruka je uspešno poslata!');
+    if (validateForm() && isSubmittingAllowed) {
+      alert(
+        `Poruka uspešno poslata!\n\nIme i prezime: ${formData.name}\nEmail: ${formData.email}\nPoruka: ${formData.message}`
+      );
       setFormData({ name: '', email: '', message: '' });
       setCharCount(0);
+      setTimer(300); // 5 minuta = 300 sekundi
+      setIsSubmittingAllowed(false);
+    } else if (!isSubmittingAllowed) {
+      alert(`Poruka može biti poslata tek za ${timer} sekundi.`);
     }
   };
 
@@ -82,9 +100,18 @@ const HomePage = () => {
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-          <button type="submit" className="send-button">
+          <button
+            type="submit"
+            className="send-button"
+            disabled={!isSubmittingAllowed}
+          >
             Pošalji
           </button>
+          {!isSubmittingAllowed && (
+            <p className="timer-message">
+              Možete poslati novu poruku za {timer} sekundi.
+            </p>
+          )}
         </form>
       </section>
     </div>
