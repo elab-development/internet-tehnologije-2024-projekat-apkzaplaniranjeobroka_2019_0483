@@ -88,6 +88,12 @@ const LoginPage = () => {
     }
   };
 
+  const handleRemoveUser = (userEmail) => {
+    const updatedUsers = savedUsers.filter((user) => user.email !== userEmail);
+    localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
+    setSavedUsers(updatedUsers);
+  };
+
   return (
     <div className="login-page-container">
       <div className="login-box">
@@ -99,13 +105,20 @@ const LoginPage = () => {
             <h3>Brzi login</h3>
             <div className="saved-users">
               {savedUsers.map((user, index) => (
-                <div
-                  key={index}
-                  className="saved-user"
-                  onClick={() => handleQuickLogin(user.email, user.password)}
-                >
-                  <span>{user.name}</span>
-                  <p>{user.email}</p>
+                <div key={index} className="saved-user">
+                  <div
+                    className="saved-user-info"
+                    onClick={() => handleQuickLogin(user.email, user.password)}
+                  >
+                    <span>{user.name}</span>
+                    <p>{user.email}</p>
+                  </div>
+                  <button
+                    className="remove-user-button"
+                    onClick={() => handleRemoveUser(user.email)}
+                  >
+                    X
+                  </button>
                 </div>
               ))}
             </div>
