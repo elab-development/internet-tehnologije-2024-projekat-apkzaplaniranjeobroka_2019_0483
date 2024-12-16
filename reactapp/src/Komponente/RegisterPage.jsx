@@ -7,22 +7,18 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
   const [selectedAlergije, setSelectedAlergije] = useState([]);
   const [selectedDijetetskePreferencije, setSelectedDijetetskePreferencije] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const API_KEY = 'ag23EGdc6Mp8KAFR8e9b0a2l5XXP4KdS7zFrPTV5';  
+  const API_KEY = 'ag23EGdc6Mp8KAFR8e9b0a2l5XXP4KdS7zFrPTV5';
 
-  const alergijeOpcije = [
-    'Gluten', 'Laktoza', 'Kikiriki', 'Orašasti plodovi', 'Jaja',
-    'Riba', 'Školjke', 'Soja', 'Sezam', 'Med'
-  ];
+  const alergijeOpcije = ['Gluten', 'Laktoza', 'Kikiriki', 'Orašasti plodovi', 'Jaja', 'Riba', 'Školjke', 'Soja', 'Sezam', 'Med'];
 
-  const dijetetskeOpcije = [
-    'Vegetarijanstvo', 'Vegan', 'Bez šećera', 'Bez soli', 'Keto',
-    'Paleo', 'Bez glutena', 'Visokoproteinska'
-  ];
+  const dijetetskeOpcije = ['Vegetarijanstvo', 'Vegan', 'Bez šećera', 'Bez soli', 'Keto', 'Paleo', 'Bez glutena', 'Visokoproteinska'];
 
   const toggleOption = (option, setOptions) => {
     setOptions((prev) =>
@@ -98,7 +94,8 @@ const RegisterPage = () => {
     <div className="login-page-container">
       <div className="login-box">
         <h2 className="login-title">Registracija</h2>
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form"
+          onSubmit={handleSubmit}>
           <label>Ime i prezime:</label>
           <input
             type="text"
@@ -118,22 +115,38 @@ const RegisterPage = () => {
           />
 
           <label>Lozinka:</label>
-          <input
-            type="password"
-            placeholder="Vaša lozinka"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="password-input-container">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Vaša lozinka"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="toggle-password"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? '👁️' : '🙈'}
+            </span>
+          </div>
 
           <label>Potvrdi lozinku:</label>
-          <input
-            type="password"
-            placeholder="Potvrdi lozinku"
-            value={passwordConfirmation}
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-            required
-          />
+          <div className="password-input-container">
+            <input
+              type={showPasswordConfirmation ? 'text' : 'password'}
+              placeholder="Potvrdi lozinku"
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              required
+            />
+            <span
+              className="toggle-password"
+              onClick={() => setShowPasswordConfirmation((prev) => !prev)}
+            >
+              {showPasswordConfirmation ? '👁️' : '🙈'}
+            </span>
+          </div>
 
           <div className="button-container">
             <button type="button" onClick={generatePassword} className="login-button">
