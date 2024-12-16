@@ -10,7 +10,9 @@ const RegisterPage = () => {
   const [selectedAlergije, setSelectedAlergije] = useState([]);
   const [selectedDijetetskePreferencije, setSelectedDijetetskePreferencije] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate(); // Dodajemo useNavigate za preusmeravanje
+  const navigate = useNavigate();
+
+  const API_KEY = 'ag23EGdc6Mp8KAFR8e9b0a2l5XXP4KdS7zFrPTV5';  
 
   const alergijeOpcije = [
     'Gluten', 'Laktoza', 'Kikiriki', 'Orašasti plodovi', 'Jaja',
@@ -26,6 +28,36 @@ const RegisterPage = () => {
     setOptions((prev) =>
       prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
     );
+  };
+
+  const generatePassword = async () => {
+    try {
+      const response = await fetch('https://api.api-ninjas.com/v1/passwordgenerator?length=12', {
+        headers: { 'X-Api-Key': API_KEY },
+      });
+      const data = await response.json();
+      if (data.random_password) {
+        setPassword(data.random_password);
+        setPasswordConfirmation(data.random_password);
+      }
+    } catch (error) {
+      alert('Greška pri generisanju lozinke.');
+    }
+  };
+
+  const generateUserData = async () => {
+    try {
+      const response = await fetch('https://api.api-ninjas.com/v1/randomuser', {
+        headers: { 'X-Api-Key': API_KEY },
+      });
+      const data = await response.json();
+      if (data) {
+        setName(`${data.first_name} ${data.last_name}`);
+        setEmail(data.email);
+      }
+    } catch (error) {
+      alert('Greška pri generisanju podataka korisnika.');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,16 +81,11 @@ const RegisterPage = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Prikazujemo greške kroz alert
-        if (data.errors) {
-          const errorMessages = Object.values(data.errors).flat().join('\n');
-          alert(`Greške:\n${errorMessages}`);
-        } else {
-          alert('Greška pri registraciji');
-        }
+        const errorMessages = Object.values(data.errors).flat().join('\n');
+        alert(`Greške:\n${errorMessages}`);
       } else {
         alert(`Uspešno ste registrovani, dobrodošli ${data.user.name}`);
-        navigate('/login'); // Preusmeravanje na login stranicu
+        navigate('/login');
       }
     } catch (error) {
       alert('Došlo je do greške. Pokušajte ponovo.');
@@ -107,6 +134,15 @@ const RegisterPage = () => {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             required
           />
+
+          <div className="button-container">
+            <button type="button" onClick={generatePassword} className="login-button">
+              Generiši lozinku
+            </button>
+            <button type="button" onClick={generateUserData} className="login-button">
+              Generiši podatke korisnika
+            </button>
+          </div>
 
           <label>Alergije (izaberi):</label>
           <div className="alergije-container">
