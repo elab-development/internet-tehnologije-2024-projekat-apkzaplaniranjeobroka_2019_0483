@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -6,6 +6,14 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [savedUsers, setSavedUsers] = useState([]);
+  const [saveForQuickLogin, setSaveForQuickLogin] = useState(false); // Novi state za checkbox
+
+  // Učitavanje sačuvanih korisnika iz localStorage
+  useEffect(() => {
+    const users = JSON.parse(localStorage.getItem('savedUsers')) || [];
+    setSavedUsers(users);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,7 +21,7 @@ const LoginPage = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch('http://localhost/api/login', {
+      const response = await fetch('http://127.0.0.1:8000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,7 +35,51 @@ const LoginPage = () => {
         setErrorMessage(data.message || 'Greška pri prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
-        localStorage.setItem('token', data.token); // Čuvanje tokena u localStorage
+
+        // Čuvanje tokena u localStorage
+        localStorage.setItem('token', data.token);
+
+        // Sačuvaj korisnika za brzi login ako je checkbox označen
+        if (saveForQuickLogin) {
+          const users = JSON.parse(localStorage.getItem('savedUsers')) || [];
+          if (!users.some((user) => user.email === email)) {
+            users.push({ name: data.user.name, email, password }); // Čuvamo i lozinku
+            localStorage.setItem('savedUsers', JSON.stringify(users));
+            setSavedUsers(users);
+          }
+        }
+      }
+    } catch (error) {
+      setErrorMessage('Došlo je do greške. Pokušajte ponovo.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleQuickLogin = async (userEmail, userPassword) => {
+    setEmail(userEmail);
+    setPassword(userPassword);
+
+    // Automatski poziv za prijavu
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: userEmail, password: userPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(data.message || 'Greška pri brzom prijavljivanju');
+      } else {
+        alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
+        localStorage.setItem('token', data.token);
       }
     } catch (error) {
       setErrorMessage('Došlo je do greške. Pokušajte ponovo.');
@@ -40,6 +92,26 @@ const LoginPage = () => {
     <div className="login-page-container">
       <div className="login-box">
         <h2 className="login-title">Prijavi se</h2>
+
+        {/* Brzi login sekcija */}
+        {savedUsers.length > 0 && (
+          <div className="quick-login-section">
+            <h3>Brzi login</h3>
+            <div className="saved-users">
+              {savedUsers.map((user, index) => (
+                <div
+                  key={index}
+                  className="saved-user"
+                  onClick={() => handleQuickLogin(user.email, user.password)}
+                >
+                  <span>{user.name}</span>
+                  <p>{user.email}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <form className="login-form" onSubmit={handleSubmit}>
           <label>Email adresa:</label>
           <input
@@ -60,6 +132,16 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+          <div className="save-option">
+            <input
+              type="checkbox"
+              id="saveForQuickLogin"
+              checked={saveForQuickLogin}
+              onChange={(e) => setSaveForQuickLogin(e.target.checked)}
+            />
+            <label htmlFor="saveForQuickLogin">Sačuvaj podatke za brzi login</label>
+          </div>
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
