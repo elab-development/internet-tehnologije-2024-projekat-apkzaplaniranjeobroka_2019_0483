@@ -11,13 +11,16 @@ body, html {
   flex-direction: column;
   align-items: center;
   overflow-x: hidden;
+  width: 100%;
+  height:  100%;
+  padding-top: 60%;
 }
 
 /* Hero sekcija */
 .hero-section {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height:  100%;
   overflow: hidden;
 }
 
@@ -216,4 +219,77 @@ body, html {
 .testimonial h4 {
   font-size: 1.1rem;
   font-weight: 700;
+}
+
+/* Contact sekcija */
+.contact-section {
+  background: #fff;
+  width: 100%;
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.contact-section p {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.contact-form label {
+  align-self: flex-start;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  resize: none;
+}
+
+.send-button {
+  background: #ff5c5c;
+  border: none;
+  padding: 15px 30px;
+  color: #fff;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.send-button:hover {
+  background: #ff2e2e;
+}
+
+/* Footer */
+.footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
+  font-size: 0.9rem;
 }

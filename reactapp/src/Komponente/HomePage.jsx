@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './HomePage.css';
 
 const HomePage = () => {
-     
   return (
     <div className="homepage-container">
       {/* Hero sekcija sa pozadinskim videom */}
@@ -16,21 +15,7 @@ const HomePage = () => {
           <button className="cta-button">Započni sada</button>
         </div>
       </section>
-
-      {/* Sekcija sa informacijama o aplikaciji */}
-      <section className="info-section">
-        <div className="info-content">
-          <h2>Zašto baš naša aplikacija?</h2>
-          <p>
-            Naša aplikacija vam pomaže da pametno planirate obroke za čitavu nedelju. Pretražite recepte, filtrirajte po sastojcima, isključite alergene i kreirajte personalizovane planove ishrane.  
-            Automatski generišite listu za kupovinu i uštedite vreme i novac.
-          </p>
-        </div>
-        <div className="info-images">
-          <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Healthy meal" className="info-image"/>
-          <img src="https://images.pexels.com/photos/7410953/pexels-photo-7410953.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Groceries list" className="info-image"/>
-        </div>
-      </section>
+ 
 
       {/* Sekcija sa prikazom funkcionalnosti */}
       <section className="features-section">
@@ -59,7 +44,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Sekcija sa svedočanstvima */}
+      {/* Sekcija sa svjedočanstvima */}
       <section className="testimonials-section">
         <h2>Šta kažu naši korisnici</h2>
         <div className="testimonials-grid">
@@ -81,8 +66,9 @@ const HomePage = () => {
         </div>
       </section>
 
-   
-    
+ 
+
+     
     </div>
   );
 };
