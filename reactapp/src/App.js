@@ -6,6 +6,7 @@ import ContactPage from './Komponente/ContactPage';
 import RegisterPage from './Komponente/RegisterPage';
 import Navbar from './Komponente/Navbar';
 import PlanoviObroka from './Komponente/PlanoviObroka';
+import KreirajPlanObroka from './Komponente/KreirajPlanObroka';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/kontakt" element={<ContactPage />} />
           <Route path="/planiraj" element={<PlanoviObroka />} />
+          <Route path="/kreirajPlan" element={<KreirajPlanObroka />} />
+
 
         </Routes>
       </div>

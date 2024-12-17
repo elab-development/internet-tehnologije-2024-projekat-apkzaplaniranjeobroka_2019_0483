@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import usePlanoviObroka from './usePlanoviObroka';
 
-const PlanoviObroka = ({ token }) => {
+const PlanoviObroka = ( ) => {
+    const token= localStorage.getItem('token')
   const [filters, setFilters] = useState({}); // Početni filteri
   const { planovi, pagination, isLoading, error, fetchPlanovi } = usePlanoviObroka(token, filters);
 
