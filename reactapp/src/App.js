@@ -4,11 +4,13 @@ import HomePage from './Komponente/HomePage';
 import LoginPage from './Komponente/LoginPage';
 import ContactPage from './Komponente/ContactPage';
 import RegisterPage from './Komponente/RegisterPage';
+import Navbar from './Komponente/Navbar';
 
 function App() {
   return (
     <Router>
       <div className="App">
+      <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

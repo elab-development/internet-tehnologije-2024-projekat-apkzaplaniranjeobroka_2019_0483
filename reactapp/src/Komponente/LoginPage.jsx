@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './LoginPage.css';
+import useAuthStatus from './useAuthStatus';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const { isLoggedIn, user, login, logout } = useAuthStatus();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [savedUsers, setSavedUsers] = useState([]);
   const [saveForQuickLogin, setSaveForQuickLogin] = useState(false); // Novi state za checkbox
-
+  let navigate= useNavigate();
   // Učitavanje sačuvanih korisnika iz localStorage
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem('savedUsers')) || [];
@@ -35,7 +38,9 @@ const LoginPage = () => {
         setErrorMessage(data.message || 'Greška pri prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
-
+      // Pozivamo login funkciju sa tokenom i korisničkim podacima
+      login(data.token, data.user);
+      navigate('/planiraj')
         // Čuvanje tokena u localStorage
         localStorage.setItem('token', data.token);
 
@@ -79,6 +84,8 @@ const LoginPage = () => {
         setErrorMessage(data.message || 'Greška pri brzom prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
+        login(data.token, data.user);
+        navigate('/planiraj')
         localStorage.setItem('token', data.token);
       }
     } catch (error) {
