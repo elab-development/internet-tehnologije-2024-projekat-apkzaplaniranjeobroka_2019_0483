@@ -32,7 +32,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <h1>Planiranje Obroka</h1>
+        <h1>Planiranje obroka app</h1>
       </div>
       <ul className="navbar-links">
         {!isLoggedIn ? (
