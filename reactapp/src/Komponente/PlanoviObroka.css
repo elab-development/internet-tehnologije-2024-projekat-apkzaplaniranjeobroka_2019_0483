@@ -197,4 +197,32 @@ body, html {
       max-width: 100%;
     }
   }
+  .plan-stavke {
+    margin-top: 40px;
+    padding: 20px;
+    background: #fefefe;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .plan-stavke h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #ff5c5c;
+  }
+  
+  .plan-stavke ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .plan-stavke li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+  }
+  
+  .plan-stavke li:last-child {
+    border-bottom: none;
+  }
   

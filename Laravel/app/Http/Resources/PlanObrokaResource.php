@@ -19,7 +19,8 @@ class PlanObrokaResource extends JsonResource
             'naziv' => $this->naziv,
             'period_od' => $this->period_od,
             'period_do' => $this->period_do,
-            'stavke_plana' => $this->stavkePlana,
+            'stavke_plana' => StavkaPlanaResource::collection($this->stavkePlana)
+          
         ];
     }
 }
