@@ -1,7 +1,12 @@
 import React from 'react';
 import './HomePage.css';
+import { useNavigate } from "react-router-dom";
+const HomePage = () => { 
+  const navigate = useNavigate();
 
-const HomePage = () => {
+  const handleClick = () => {
+      navigate("/login");
+  };
   return (
     <div className="homepage-container">
       {/* Hero sekcija sa pozadinskim videom */}
@@ -12,7 +17,9 @@ const HomePage = () => {
         <div className="hero-overlay">
           <h1 className="hero-title">Planiraj svoje obroke uz lakoću</h1>
           <p className="hero-subtitle">Napravi nedeljni plan obroka, odaberi recepte i generiši listu za kupovinu automatski.</p>
-          <button className="cta-button">Započni sada</button>
+          <button className="cta-button" onClick={handleClick}>
+            Započni sada
+        </button>
         </div>
       </section>
  
@@ -50,7 +57,7 @@ const HomePage = () => {
         <div className="testimonials-grid">
           <div className="testimonial">
             <img src="https://images.pexels.com/photos/3775537/pexels-photo-3775537.jpeg?auto=compress&cs=tinysrgb&w=200" alt="User 1" />
-            <p>"Aplikacija mi je olakšala pripremu obroka za cijelu porodicu! Sada znam tačno šta kupiti i koliko."</p>
+            <p>"Aplikacija mi je olakšala pripremu obroka za celu porodicu! Sada znam tačno šta kupiti i koliko."</p>
             <h4>- Ana</h4>
           </div>
           <div className="testimonial">

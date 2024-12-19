@@ -1,0 +1,233 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    background: #f7f7f7;
+    color: #333;
+  }
+  
+  .plan-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+  }
+  
+  /* Overlay style similar to hero overlay */
+  .plan-overlay {
+    background-color: rgba(0,0,0,0.4);
+    padding: 40px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    animation: fadeIn 1.5s ease-in-out;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  
+  .plan-overlay h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
+  }
+  
+  /* Form styling */
+  .plan-overlay form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .plan-overlay form label {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #fff;
+    font-weight: 500;
+  }
+  
+  .plan-overlay form input[type="text"],
+  .plan-overlay form input[type="date"],
+  .plan-overlay form select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: #fff;
+    color: #333;
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  
+  .plan-overlay form input[type="text"]:focus,
+  .plan-overlay form input[type="date"]:focus,
+  .plan-overlay form select:focus {
+    box-shadow: 0 0 10px rgba(255,92,92,0.6);
+    transform: translateY(-2px);
+  }
+  
+  .plan-overlay form h3 {
+    margin: 30px 0 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+  }
+  
+  /* Individual stavka styling */
+  .plan-overlay form > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  /* Add button and submit button styling */
+  .add-button, 
+  .plan-overlay form button[type="submit"] {
+    padding: 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    margin: 10px 0;
+  }
+  
+  /* Primary action button (submit) */
+  .plan-overlay form button[type="submit"] {
+    background: #ff5c5c;
+    color: #fff;
+  }
+  
+  .plan-overlay form button[type="submit"]:hover {
+    background: #ff2e2e;
+    transform: translateY(-3px);
+  }
+  
+  /* Secondary action button (add stavka) */
+  .add-button {
+    background: #fff;
+    color: #333;
+    border: 2px solid #ff5c5c;
+    font-weight: 600;
+  }
+  
+  .add-button:hover {
+    background: #ff5c5c;
+    color: #fff;
+    transform: translateY(-3px);
+  }
+  
+  /* Error message styling */
+  .plan-overlay p[style*="color: red"] {
+    background: rgba(255,0,0,0.1);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .plan-overlay {
+      padding: 20px;
+    }
+    
+    .plan-overlay h2 {
+      font-size: 1.8rem;
+    }
+    
+    .plan-overlay form h3 {
+      font-size: 1.3rem;
+    }
+  }
+  /* Postojeći CSS kod plan-container i plan-overlay ostaje, samo dodajemo stil za stavke */
+
+.stavka-card {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    margin-bottom: 20px;
+    animation: fadeInStavka 0.5s ease-in-out;
+    position: relative;
+  }
+  
+  @keyframes fadeInStavka {
+    from {opacity: 0; transform: translateY(-5px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+  
+  .stavka-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .stavka-field {
+    flex: 1;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .stavka-field label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .stavka-field input[type="date"],
+  .stavka-field input[type="text"],
+  .stavka-field select {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.95rem;
+    color: #333;
+    background: #f0f0f0;
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  
+  .stavka-field input:focus,
+  .stavka-field select:focus {
+    box-shadow: 0 0 10px rgba(255,92,92,0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Dugme za uklanjanje stavke */
+  .remove-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .remove-button:hover {
+    background: #ff2e2e;
+  }
+  
+  /* Dugmad za dodavanje i kreiranje ostaju kao u prethodnom kodu */
+  .add-button, 
+  .plan-overlay form button[type="submit"] {
+    margin-top: 20px;
+  }
+  
