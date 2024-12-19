@@ -56,6 +56,9 @@ const Navbar = () => {
               <Link to="/planiraj">Planiraj</Link>
             </li>
             <li>
+              <Link to="/kreirajPlan">KreirajPlan</Link>
+            </li>
+            <li>
               <button className="logout-button" onClick={handleLogout}>
                 Odjavi se ({user?.name})
               </button>

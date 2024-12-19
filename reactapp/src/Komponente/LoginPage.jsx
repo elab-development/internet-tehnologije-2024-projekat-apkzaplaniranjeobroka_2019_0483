@@ -3,7 +3,7 @@ import './LoginPage.css';
 import useAuthStatus from './useAuthStatus';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
   const { isLoggedIn, user, login, logout } = useAuthStatus();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,6 +38,7 @@ const LoginPage = () => {
         setErrorMessage(data.message || 'Greška pri prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
+        
       // Pozivamo login funkciju sa tokenom i korisničkim podacima
       login(data.token, data.user);
       navigate('/planiraj')
