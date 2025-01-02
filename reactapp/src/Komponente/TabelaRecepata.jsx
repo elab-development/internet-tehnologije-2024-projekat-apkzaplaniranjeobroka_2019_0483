@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useRecepti from './useRecepti';
+import ModalRecept from './ModalRecept';
 import './TabelaRecepata.css';
 
 const TabelaRecepata = () => {
   const token = localStorage.getItem('token'); // Dohvatanje tokena iz lokalnog skladišta
   const { recepti, isLoading, error } = useRecepti(token); // Korišćenje kuke za učitavanje recepata
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleReceptKreiran = (noviRecept) => {
+    // Osvježava listu recepata - ovde možeš dodati logiku za ponovno učitavanje
+    console.log('Recept kreiran:', noviRecept);
+  };
 
   return (
     <div className="recepti-container">
       <h1 className="recepti-title">Lista Recepata</h1>
+      <button className="create-recept-button" onClick={handleOpenModal}>
+        Dodaj novi recept
+      </button>
 
       {isLoading && <p className="loading-message">Učitavanje recepata...</p>}
       {error && <p className="error-message">{error}</p>}
@@ -44,6 +62,12 @@ const TabelaRecepata = () => {
       )}
 
       {!isLoading && recepti.length === 0 && <p className="no-data-message">Nema dostupnih recepata.</p>}
+
+      <ModalRecept
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onReceptKreiran={handleReceptKreiran}
+      />
     </div>
   );
 };
