@@ -46,6 +46,18 @@ const TabelaRecepata = () => {
     setInitialData(null);
   };
 
+  const handleDeleteRecept = async (id) => {
+    try {
+      await fetch(`http://127.0.0.1:8000/api/recepti/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setRecepti((prevRecepti) => prevRecepti.filter((recept) => recept.id !== id));
+    } catch (err) {
+      setError('Greška pri brisanju recepta.');
+    }
+  };
+
   const handleOpenModal = () => {
     setInitialData(null);
     setIsModalOpen(true);
@@ -81,11 +93,22 @@ const TabelaRecepata = () => {
     {
       field: 'actions',
       headerName: 'Akcije',
-      width: 150,
+      width: 200,
       renderCell: (params) => (
-        <button className="edit-button" onClick={() => handleEditRecept(params.row)}>
-          Izmeni
-        </button>
+        <div className="actions-container">
+          <button
+            className="edit-button"
+            onClick={() => handleEditRecept(params.row)}
+          >
+            Izmeni
+          </button>
+          <button
+            className="delete-button"
+            onClick={() => handleDeleteRecept(params.row.id)}
+          >
+            Obriši
+          </button>
+        </div>
       ),
     },
   ];
