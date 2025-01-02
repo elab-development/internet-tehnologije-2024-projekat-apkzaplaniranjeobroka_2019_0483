@@ -9,6 +9,7 @@ import PlanoviObroka from './Komponente/PlanoviObroka';
 import KreirajPlanObroka from './Komponente/KreirajPlanObroka';
 import useAuthStatus from './Komponente/useAuthStatus';
 import { useEffect, useState } from 'react';
+import TabelaRecepata from './Komponente/TabelaRecepata';
 
 function App() {
   const { isLoggedIn, user, token } = useAuthStatus();
@@ -28,6 +29,7 @@ function App() {
           <Route path="/kontakt" element={<ContactPage />} />
           <Route path="/planiraj" element={<PlanoviObroka />} />     {/*za seminarski dopunjeno sa funkcionalnoscu za preuzimanje pdfa */}
           <Route path="/kreirajPlan" element={<KreirajPlanObroka />} />
+          <Route path="/recepti" element={<TabelaRecepata />} />
 
 
         </Routes>

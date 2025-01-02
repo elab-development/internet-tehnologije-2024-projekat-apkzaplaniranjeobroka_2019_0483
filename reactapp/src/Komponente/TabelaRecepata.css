@@ -1,0 +1,51 @@
+.recepti-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recepti-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ff5c5c;
+  }
+  
+  .loading-message,
+  .error-message,
+  .no-data-message {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .recepti-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .recepti-table th,
+  .recepti-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .recepti-table th {
+    background: #ff5c5c;
+    color: #fff;
+  }
+  
+  .recepti-table tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+  
+  .recepti-table tr:hover {
+    background: #f1f1f1;
+  }
+  
