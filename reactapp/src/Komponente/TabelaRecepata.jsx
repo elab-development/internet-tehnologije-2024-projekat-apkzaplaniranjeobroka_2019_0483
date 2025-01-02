@@ -1,12 +1,38 @@
-import React, { useState } from 'react';
-import useRecepti from './useRecepti';
+import React, { useState, useEffect } from 'react';
+import { DataGrid } from '@mui/x-data-grid';
 import ModalRecept from './ModalRecept';
 import './TabelaRecepata.css';
 
 const TabelaRecepata = () => {
-  const token = localStorage.getItem('token'); // Dohvatanje tokena iz lokalnog skladišta
-  const { recepti, isLoading, error } = useRecepti(token); // Korišćenje kuke za učitavanje recepata
+  const token = localStorage.getItem('token');
+  const [recepti, setRecepti] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchRecepti = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('http://127.0.0.1:8000/api/recepti', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      setRecepti(data);
+    } catch (err) {
+      setError('Greška pri učitavanju recepata.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecepti();
+  }, []);
+
+  const handleReceptKreiran = (noviRecept) => {
+    setRecepti((prevRecepti) => [noviRecept, ...prevRecepti]);
+    setIsModalOpen(false);
+  };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -16,10 +42,24 @@ const TabelaRecepata = () => {
     setIsModalOpen(false);
   };
 
-  const handleReceptKreiran = (noviRecept) => {
-    // Osvježava listu recepata - ovde možeš dodati logiku za ponovno učitavanje
-    console.log('Recept kreiran:', noviRecept);
-  };
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 100 },
+    { field: 'naziv', headerName: 'Naziv', width: 200 },
+    { field: 'opis', headerName: 'Opis', width: 300 },
+    {
+      field: 'sastojci',
+      headerName: 'Sastojci',
+      width: 250,
+      renderCell: (params) => params.value.join(', '),
+    },
+    {
+      field: 'nutritivne_vrednosti',
+      headerName: 'Nutritivne vrednosti',
+      width: 400,
+      renderCell: (params) =>
+        `Kalorije: ${params.value.kalorije || 'N/A'}, Proteini: ${params.value.proteini || 'N/A'}, Masti: ${params.value.masti || 'N/A'}, Ugljeni hidrati: ${params.value.ugljeni_hidrati || 'N/A'}`,
+    },
+  ];
 
   return (
     <div className="recepti-container">
@@ -31,37 +71,18 @@ const TabelaRecepata = () => {
       {isLoading && <p className="loading-message">Učitavanje recepata...</p>}
       {error && <p className="error-message">{error}</p>}
 
-      {!isLoading && recepti.length > 0 && (
-        <table className="recepti-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Naziv</th>
-              <th>Opis</th>
-              <th>Sastojci</th>
-              <th>Nutritivne vrednosti</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recepti.map((recept) => (
-              <tr key={recept.id}>
-                <td>{recept.id}</td>
-                <td>{recept.naziv}</td>
-                <td>{recept.opis || 'N/A'}</td>
-                <td>{recept.sastojci.join(', ')}</td>
-                <td>
-                  {`Kalorije: ${recept.nutritivne_vrednosti.kalorije || 'N/A'}, 
-                  Proteini: ${recept.nutritivne_vrednosti.proteini || 'N/A'}, 
-                  Masti: ${recept.nutritivne_vrednosti.masti || 'N/A'}, 
-                  Ugljeni hidrati: ${recept.nutritivne_vrednosti.ugljeni_hidrati || 'N/A'}`}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {!isLoading && (
+        <div style={{ height: 600, width: '100%' }}>
+          <DataGrid
+            rows={recepti}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10, 20, 30]}
+            checkboxSelection={false}
+            disableSelectionOnClick
+          />
+        </div>
       )}
-
-      {!isLoading && recepti.length === 0 && <p className="no-data-message">Nema dostupnih recepata.</p>}
 
       <ModalRecept
         isOpen={isModalOpen}

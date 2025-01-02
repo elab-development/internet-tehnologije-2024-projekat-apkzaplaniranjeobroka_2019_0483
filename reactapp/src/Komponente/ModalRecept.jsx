@@ -1,22 +1,37 @@
 import React, { useState } from 'react';
 import axios from 'axios';
- 
 
 const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
   const [formData, setFormData] = useState({
     naziv: '',
     opis: '',
     sastojci: '',
-    nutritivne_vrednosti: '',
+    nutritivne_vrednosti: {
+      kalorije: '',
+      proteini: '',
+      masti: '',
+      ugljeni_hidrati: '',
+    },
   });
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (['kalorije', 'proteini', 'masti', 'ugljeni_hidrati'].includes(name)) {
+      setFormData((prevData) => ({
+        ...prevData,
+        nutritivne_vrednosti: {
+          ...prevData.nutritivne_vrednosti,
+          [name]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -31,10 +46,10 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
           opis: formData.opis,
           sastojci: JSON.stringify(formData.sastojci.split(',')),
           nutritivne_vrednosti: JSON.stringify({
-            kalorije: formData.nutritivne_vrednosti.kalorije || 0,
-            proteini: formData.nutritivne_vrednosti.proteini || 0,
-            masti: formData.nutritivne_vrednosti.masti || 0,
-            ugljeni_hidrati: formData.nutritivne_vrednosti.ugljeni_hidrati || 0,
+            kalorije: parseFloat(formData.nutritivne_vrednosti.kalorije) || 0,
+            proteini: parseFloat(formData.nutritivne_vrednosti.proteini) || 0,
+            masti: parseFloat(formData.nutritivne_vrednosti.masti) || 0,
+            ugljeni_hidrati: parseFloat(formData.nutritivne_vrednosti.ugljeni_hidrati) || 0,
           }),
         },
         {
@@ -45,8 +60,8 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
         }
       );
 
-      onReceptKreiran(response.data); // Poziva funkciju za osvežavanje
-      onClose(); // Zatvara modal
+      onReceptKreiran(response.data);
+      onClose();
     } catch (err) {
       setError(err.response?.data?.message || 'Došlo je do greške.');
     }
@@ -88,16 +103,45 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
               required
             />
           </label>
-          <label>
-            Nutritivne vrednosti:
-            <input
-              type="text"
-              name="nutritivne_vrednosti"
-              placeholder="Kalorije, Proteini, Masti, Ugljeni hidrati"
-              value={formData.nutritivne_vrednosti}
-              onChange={handleChange}
-            />
-          </label>
+          <fieldset>
+            <legend>Nutritivne vrednosti:</legend>
+            <label>
+              Kalorije:
+              <input
+                type="number"
+                name="kalorije"
+                value={formData.nutritivne_vrednosti.kalorije}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Proteini:
+              <input
+                type="number"
+                name="proteini"
+                value={formData.nutritivne_vrednosti.proteini}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Masti:
+              <input
+                type="number"
+                name="masti"
+                value={formData.nutritivne_vrednosti.masti}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Ugljeni hidrati:
+              <input
+                type="number"
+                name="ugljeni_hidrati"
+                value={formData.nutritivne_vrednosti.ugljeni_hidrati}
+                onChange={handleChange}
+              />
+            </label>
+          </fieldset>
           <div className="modal-actions">
             <button type="submit" className="submit-button">
               Kreiraj
