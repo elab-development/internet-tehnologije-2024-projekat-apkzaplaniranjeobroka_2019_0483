@@ -9,6 +9,7 @@ const TabelaRecepata = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [initialData, setInitialData] = useState(null);
 
   const fetchRecepti = async () => {
     try {
@@ -32,14 +33,32 @@ const TabelaRecepata = () => {
   const handleReceptKreiran = (noviRecept) => {
     setRecepti((prevRecepti) => [noviRecept, ...prevRecepti]);
     setIsModalOpen(false);
+    setInitialData(null);
+  };
+
+  const handleReceptIzmenjen = (izmenjenRecept) => {
+    setRecepti((prevRecepti) =>
+      prevRecepti.map((recept) =>
+        recept.id === izmenjenRecept.id ? izmenjenRecept : recept
+      )
+    );
+    setIsModalOpen(false);
+    setInitialData(null);
   };
 
   const handleOpenModal = () => {
+    setInitialData(null);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setInitialData(null);
+  };
+
+  const handleEditRecept = (recept) => {
+    setInitialData(recept);
+    setIsModalOpen(true);
   };
 
   const columns = [
@@ -58,6 +77,16 @@ const TabelaRecepata = () => {
       width: 400,
       renderCell: (params) =>
         `Kalorije: ${params.value.kalorije || 'N/A'}, Proteini: ${params.value.proteini || 'N/A'}, Masti: ${params.value.masti || 'N/A'}, Ugljeni hidrati: ${params.value.ugljeni_hidrati || 'N/A'}`,
+    },
+    {
+      field: 'actions',
+      headerName: 'Akcije',
+      width: 150,
+      renderCell: (params) => (
+        <button className="edit-button" onClick={() => handleEditRecept(params.row)}>
+          Izmeni
+        </button>
+      ),
     },
   ];
 
@@ -88,6 +117,8 @@ const TabelaRecepata = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onReceptKreiran={handleReceptKreiran}
+        onReceptIzmenjen={handleReceptIzmenjen}
+        initialData={initialData}
       />
     </div>
   );

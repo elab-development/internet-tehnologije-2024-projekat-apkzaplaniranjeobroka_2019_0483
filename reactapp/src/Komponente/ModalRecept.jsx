@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
+const ModalRecept = ({ isOpen, onClose, onReceptKreiran, onReceptIzmenjen, initialData }) => {
   const [formData, setFormData] = useState({
     naziv: '',
     opis: '',
@@ -14,6 +14,34 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
     },
   });
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        naziv: initialData.naziv,
+        opis: initialData.opis || '',
+        sastojci: initialData.sastojci.join(', '),
+        nutritivne_vrednosti: {
+          kalorije: initialData.nutritivne_vrednosti?.kalorije || '',
+          proteini: initialData.nutritivne_vrednosti?.proteini || '',
+          masti: initialData.nutritivne_vrednosti?.masti || '',
+          ugljeni_hidrati: initialData.nutritivne_vrednosti?.ugljeni_hidrati || '',
+        },
+      });
+    } else {
+      setFormData({
+        naziv: '',
+        opis: '',
+        sastojci: '',
+        nutritivne_vrednosti: {
+          kalorije: '',
+          proteini: '',
+          masti: '',
+          ugljeni_hidrati: '',
+        },
+      });
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,30 +65,57 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    const isUpdating = !!initialData;
 
     try {
-      const response = await axios.post(
-        'http://127.0.0.1:8000/api/recepti',
-        {
-          naziv: formData.naziv,
-          opis: formData.opis,
-          sastojci: JSON.stringify(formData.sastojci.split(',')),
-          nutritivne_vrednosti: JSON.stringify({
-            kalorije: parseFloat(formData.nutritivne_vrednosti.kalorije) || 0,
-            proteini: parseFloat(formData.nutritivne_vrednosti.proteini) || 0,
-            masti: parseFloat(formData.nutritivne_vrednosti.masti) || 0,
-            ugljeni_hidrati: parseFloat(formData.nutritivne_vrednosti.ugljeni_hidrati) || 0,
-          }),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = isUpdating
+        ? await axios.put(
+            `http://127.0.0.1:8000/api/recepti/${initialData.id}`,
+            {
+              naziv: formData.naziv,
+              opis: formData.opis,
+              sastojci: JSON.stringify(formData.sastojci.split(',')),
+              nutritivne_vrednosti: JSON.stringify({
+                kalorije: parseFloat(formData.nutritivne_vrednosti.kalorije) || 0,
+                proteini: parseFloat(formData.nutritivne_vrednosti.proteini) || 0,
+                masti: parseFloat(formData.nutritivne_vrednosti.masti) || 0,
+                ugljeni_hidrati: parseFloat(formData.nutritivne_vrednosti.ugljeni_hidrati) || 0,
+              }),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+        : await axios.post(
+            'http://127.0.0.1:8000/api/recepti',
+            {
+              naziv: formData.naziv,
+              opis: formData.opis,
+              sastojci: JSON.stringify(formData.sastojci.split(',')),
+              nutritivne_vrednosti: JSON.stringify({
+                kalorije: parseFloat(formData.nutritivne_vrednosti.kalorije) || 0,
+                proteini: parseFloat(formData.nutritivne_vrednosti.proteini) || 0,
+                masti: parseFloat(formData.nutritivne_vrednosti.masti) || 0,
+                ugljeni_hidrati: parseFloat(formData.nutritivne_vrednosti.ugljeni_hidrati) || 0,
+              }),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
 
-      onReceptKreiran(response.data);
+      if (isUpdating) {
+        onReceptIzmenjen(response.data);
+      } else {
+        onReceptKreiran(response.data);
+      }
+
       onClose();
     } catch (err) {
       setError(err.response?.data?.message || 'Došlo je do greške.');
@@ -72,7 +127,7 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Kreiraj novi recept</h2>
+        <h2>{initialData ? 'Izmeni recept' : 'Kreiraj novi recept'}</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
           <label>
@@ -144,7 +199,7 @@ const ModalRecept = ({ isOpen, onClose, onReceptKreiran }) => {
           </fieldset>
           <div className="modal-actions">
             <button type="submit" className="submit-button">
-              Kreiraj
+              {initialData ? 'Izmeni' : 'Kreiraj'}
             </button>
             <button type="button" onClick={onClose} className="cancel-button">
               Zatvori
