@@ -48,7 +48,7 @@ const RegisterPage = () => {
       });
       const data = await response.json();
       if (data) {
-        setName(`${data.first_name} ${data.last_name}`);
+        setName(`${data.name}`);
         setEmail(data.email);
       }
     } catch (error) {

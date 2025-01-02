@@ -91,7 +91,7 @@ const KreirajPlanObroka = () => {
   return (
     <div className="plan-container">
       <div className="plan-overlay">
-        <h2>Kreiraj Plan Obroka</h2>
+        <h2>Kreiraj plan obroka</h2>
         {errors && <p style={{ color: 'red' }}>Greška: {JSON.stringify(errors)}</p>}
         {receptiError && <p style={{ color: 'red' }}>Greška: {receptiError}</p>}
         <form onSubmit={handleSubmit}>

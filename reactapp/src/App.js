@@ -26,7 +26,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/kontakt" element={<ContactPage />} />
-          <Route path="/planiraj" element={<PlanoviObroka />} />
+          <Route path="/planiraj" element={<PlanoviObroka />} />     {/*za seminarski dopunjeno sa funkcionalnoscu za preuzimanje pdfa */}
           <Route path="/kreirajPlan" element={<KreirajPlanObroka />} />
 
 

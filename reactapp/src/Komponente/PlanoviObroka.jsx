@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import usePlanoviObroka from './usePlanoviObroka';
 import PlanCard from './PlanCard';
 import './PlanoviObroka.css';
@@ -30,6 +32,62 @@ const PlanoviObroka = () => {
   const handlePlanClick = (plan) => {
     setSelectedPlan(plan);
   };
+
+  const handleDownloadPDF = () => {
+    if (!selectedPlan) return;
+  
+    const doc = new jsPDF({ orientation: 'landscape' });
+  
+    // Naslov PDF-a
+    doc.setFontSize(18);
+    doc.setTextColor(255, 92, 92); // Koristi boju iz CSS-a
+    doc.text(`  ${selectedPlan.naziv}`, 14, 15);
+  
+    // Datum perioda
+    doc.setFontSize(14);
+    doc.setTextColor(51, 51, 51);
+    doc.text(`Period: ${selectedPlan.period_od} - ${selectedPlan.period_do}`, 14, 25);
+  
+    // Priprema podataka za tabelu
+    const tableData = selectedPlan.stavke_plana.map((stavka) => {
+      const sastojci = JSON.parse(stavka.recept.sastojci || '[]').join(', ');
+      const nutritivneVrednosti = JSON.parse(stavka.recept.nutritivne_vrednosti || '{}');
+  
+      return [
+        stavka.datum,
+        stavka.tip_obroka,
+        stavka.recept.naziv,
+        sastojci,
+        nutritivneVrednosti.kalorije || 'N/A',
+        nutritivneVrednosti.proteini || 'N/A',
+        nutritivneVrednosti.masti || 'N/A',
+        nutritivneVrednosti.ugljeni_hidrati || 'N/A',
+      ];
+    });
+  
+    // Dodavanje tabele u PDF
+    doc.autoTable({
+      head: [['Datum', 'Tip obroka', 'Recept', 'Sastojci', 'Kalorije', 'Proteini', 'Masti', 'Ugljeni hidrati']],
+      body: tableData,
+      startY: 35,
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        halign: 'center',
+      },
+      headStyles: {
+        fillColor: [255, 92, 92], // Boja zaglavlja
+        textColor: [255, 255, 255],
+      },
+      alternateRowStyles: {
+        fillColor: [247, 247, 247], // Siva pozadina za alternativne redove
+      },
+    });
+  
+    // Preuzimanje PDF fajla
+    doc.save(`${selectedPlan.naziv}-plan-obroka.pdf`);
+  };
+  
 
   return (
     <div className="planovi-container">
@@ -88,10 +146,13 @@ const PlanoviObroka = () => {
       {selectedPlan && (
         <div className="plan-stavke">
           <h2>Stavke plana: {selectedPlan.naziv}</h2>
+          <button className="download-pdf-button" onClick={handleDownloadPDF}>
+            Preuzmi PDF
+          </button>
           <ul>
-          {selectedPlan.stavke_plana.map((stavka) => {
-              const sastojci = JSON.parse(stavka.recept.sastojci || '[]'); // Parsiranje stringa u niz
-              const nutritivneVrednosti = JSON.parse(stavka.recept.nutritivne_vrednosti || '{}'); // Parsiranje nutritivnih vrednosti
+            {selectedPlan.stavke_plana.map((stavka) => {
+              const sastojci = JSON.parse(stavka.recept.sastojci || '[]');
+              const nutritivneVrednosti = JSON.parse(stavka.recept.nutritivne_vrednosti || '{}');
 
               return (
                 <li key={stavka.id} className="stavka-item">
@@ -110,7 +171,6 @@ const PlanoviObroka = () => {
                 </li>
               );
             })}
-
           </ul>
         </div>
       )}
