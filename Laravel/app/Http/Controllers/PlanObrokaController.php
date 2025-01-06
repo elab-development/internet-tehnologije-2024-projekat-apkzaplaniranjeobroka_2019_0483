@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlanObrokaResource;
 use App\Models\PlanObroka;
+use App\Models\StavkaPlana;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PlanObrokaController extends Controller
@@ -145,11 +147,28 @@ class PlanObrokaController extends Controller
      */
     public function destroy($id)
     {
-        $plan = PlanObroka::where('id', $id)
-        ->where('korisnik_id', auth()->id())
-        ->firstOrFail();
-        $plan->delete();
+        try {
+            DB::beginTransaction();
 
-        return response()->json(['message' => 'Plan obroka uspešno obrisan.'], 200);
+            // Pronađi plan obroka
+            $plan = PlanObroka::findOrFail($id);
+
+            // Obriši sve stavke povezane s planom obroka
+            StavkaPlana::where('plan_obroka_id', $plan->id)->delete();
+
+            // Obriši sam plan obroka
+            $plan->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Plan obroka i njegove stavke su uspešno obrisani.'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Došlo je do greške prilikom brisanja plana obroka.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
