@@ -8,7 +8,7 @@ import './PlanoviObroka.css';
 const PlanoviObroka = () => {
   const token = localStorage.getItem('token');
   const [filters, setFilters] = useState({});
-  const [selectedPlan, setSelectedPlan] = useState(null); // Držimo trenutno odabrani plan
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const { planovi, pagination, isLoading, error, fetchPlanovi } = usePlanoviObroka(token, filters);
 
@@ -35,24 +35,21 @@ const PlanoviObroka = () => {
 
   const handleDownloadPDF = () => {
     if (!selectedPlan) return;
-  
+
     const doc = new jsPDF({ orientation: 'landscape' });
-  
-    // Naslov PDF-a
+
     doc.setFontSize(18);
-    doc.setTextColor(255, 92, 92); // Koristi boju iz CSS-a
-    doc.text(`  ${selectedPlan.naziv}`, 14, 15);
-  
-    // Datum perioda
+    doc.setTextColor(255, 92, 92);
+    doc.text(`${selectedPlan.naziv}`, 14, 15);
+
     doc.setFontSize(14);
     doc.setTextColor(51, 51, 51);
     doc.text(`Period: ${selectedPlan.period_od} - ${selectedPlan.period_do}`, 14, 25);
-  
-    // Priprema podataka za tabelu
+
     const tableData = selectedPlan.stavke_plana.map((stavka) => {
       const sastojci = JSON.parse(stavka.recept.sastojci || '[]').join(', ');
       const nutritivneVrednosti = JSON.parse(stavka.recept.nutritivne_vrednosti || '{}');
-  
+
       return [
         stavka.datum,
         stavka.tip_obroka,
@@ -64,8 +61,7 @@ const PlanoviObroka = () => {
         nutritivneVrednosti.ugljeni_hidrati || 'N/A',
       ];
     });
-  
-    // Dodavanje tabele u PDF
+
     doc.autoTable({
       head: [['Datum', 'Tip obroka', 'Recept', 'Sastojci', 'Kalorije', 'Proteini', 'Masti', 'Ugljeni hidrati']],
       body: tableData,
@@ -76,24 +72,55 @@ const PlanoviObroka = () => {
         halign: 'center',
       },
       headStyles: {
-        fillColor: [255, 92, 92], // Boja zaglavlja
+        fillColor: [255, 92, 92],
         textColor: [255, 255, 255],
       },
       alternateRowStyles: {
-        fillColor: [247, 247, 247], // Siva pozadina za alternativne redove
+        fillColor: [247, 247, 247],
       },
     });
-  
-    // Preuzimanje PDF fajla
+
     doc.save(`${selectedPlan.naziv}-plan-obroka.pdf`);
   };
-  
+
+  const handleDownloadShoppingList = () => {
+    if (!selectedPlan) return;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.setTextColor(255, 92, 92);
+    doc.text(`Shopping Lista za: ${selectedPlan.naziv}`, 14, 15);
+
+    const allIngredients = selectedPlan.stavke_plana.flatMap((stavka) => JSON.parse(stavka.recept.sastojci || '[]'));
+    const uniqueIngredients = [...new Set(allIngredients)];
+
+    const tableData = uniqueIngredients.map((ingredient, index) => [index + 1, ingredient]);
+
+    doc.autoTable({
+      head: [['#', 'Sastojak']],
+      body: tableData,
+      startY: 25,
+      styles: {
+        fontSize: 12,
+        cellPadding: 3,
+      },
+      headStyles: {
+        fillColor: [255, 92, 92],
+        textColor: [255, 255, 255],
+      },
+      alternateRowStyles: {
+        fillColor: [247, 247, 247],
+      },
+    });
+
+    doc.save(`${selectedPlan.naziv}-shopping-lista.pdf`);
+  };
 
   return (
     <div className="planovi-container">
       <h1 className="planovi-title">Planovi obroka</h1>
 
-      {/* Filter forma */}
       <form className="filter-form" onSubmit={handleFilterApply}>
         <div className="filter-field">
           <label htmlFor="naziv">Naziv:</label>
@@ -142,12 +169,14 @@ const PlanoviObroka = () => {
         </div>
       )}
 
-      {/* Prikaz stavki odabranog plana */}
       {selectedPlan && (
         <div className="plan-stavke">
           <h2>Stavke plana: {selectedPlan.naziv}</h2>
           <button className="download-pdf-button" onClick={handleDownloadPDF}>
             Preuzmi PDF
+          </button>
+          <button className="download-pdf-button" onClick={handleDownloadShoppingList}>
+            Preuzmi Shopping Listu
           </button>
           <ul>
             {selectedPlan.stavke_plana.map((stavka) => {
