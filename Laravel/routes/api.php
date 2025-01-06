@@ -61,3 +61,14 @@ Route::middleware('auth:sanctum')->group(function () {
 // resetovanje lozinke
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink']);
 Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']);
+
+
+
+// Vraća sve korisnike
+Route::get('/users', [AuthController::class, 'getAllUsers'])->middleware('auth:sanctum');
+
+// Menja ulogu korisnika
+Route::patch('/users/{id}/role', [AuthController::class, 'changeUserRole'])->middleware('auth:sanctum');
+
+// Briše korisnika i njegove planove
+Route::delete('/users/{id}', [AuthController::class, 'deleteUserWithPlans'])->middleware('auth:sanctum');

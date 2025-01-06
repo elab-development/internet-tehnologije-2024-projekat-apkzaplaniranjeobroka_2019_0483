@@ -11,6 +11,7 @@ import useAuthStatus from './Komponente/useAuthStatus';
 import { useEffect, useState } from 'react';
 import TabelaRecepata from './Komponente/TabelaRecepata';
 import RecipeRecommendation from './Komponente/RecipeRecommendation';
+import UserTable from './Komponente/UserTable';
 
 function App() {
   const { isLoggedIn, user, token } = useAuthStatus();
@@ -35,6 +36,7 @@ function App() {
 
           <Route path="/recepti" element={<TabelaRecepata />} />
           <Route path="/recepti/preporuke" element={<RecipeRecommendation />} />
+          <Route path="/users" element={<UserTable />} />
 
 
 
