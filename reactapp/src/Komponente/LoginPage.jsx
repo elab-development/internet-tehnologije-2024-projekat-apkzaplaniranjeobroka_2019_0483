@@ -11,7 +11,8 @@ const LoginPage = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [savedUsers, setSavedUsers] = useState([]);
   const [saveForQuickLogin, setSaveForQuickLogin] = useState(false); // Novi state za checkbox
-  let navigate= useNavigate();
+  let navigate = useNavigate();
+
   // Učitavanje sačuvanih korisnika iz localStorage
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem('savedUsers')) || [];
@@ -38,10 +39,19 @@ const LoginPage = ({ onLogin }) => {
         setErrorMessage(data.message || 'Greška pri prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
-        
-      // Pozivamo login funkciju sa tokenom i korisničkim podacima
-      login(data.token, data.user);
-      navigate('/planiraj')
+
+        // Čuvanje dijetetskih preferencija u localStorage
+        if (data.user.dijetetske_preferencije) {
+          localStorage.setItem(
+            'dijetetske_preferencije',
+            JSON.stringify(data.user.dijetetske_preferencije)
+          );
+        }
+
+        // Pozivamo login funkciju sa tokenom i korisničkim podacima
+        login(data.token, data.user);
+        navigate('/planiraj');
+
         // Čuvanje tokena u localStorage
         localStorage.setItem('token', data.token);
 
@@ -85,8 +95,17 @@ const LoginPage = ({ onLogin }) => {
         setErrorMessage(data.message || 'Greška pri brzom prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
+
+        // Čuvanje dijetetskih preferencija u localStorage
+        if (data.user.dijetetske_preferencije) {
+          localStorage.setItem(
+            'dijetetske_preferencije',
+            JSON.stringify(data.user.dijetetske_preferencije)
+          );
+        }
+
         login(data.token, data.user);
-        navigate('/planiraj')
+        navigate('/planiraj');
         localStorage.setItem('token', data.token);
       }
     } catch (error) {
