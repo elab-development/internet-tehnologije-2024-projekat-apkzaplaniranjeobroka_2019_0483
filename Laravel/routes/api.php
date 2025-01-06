@@ -72,3 +72,8 @@ Route::patch('/users/{id}/role', [AuthController::class, 'changeUserRole'])->mid
 
 // Briše korisnika i njegove planove
 Route::delete('/users/{id}', [AuthController::class, 'deleteUserWithPlans'])->middleware('auth:sanctum');
+Route::get('/users/registration-stats', [AuthController::class, 'getUserRegistrationStats'])
+    ->middleware('auth:sanctum');
+
+
+    

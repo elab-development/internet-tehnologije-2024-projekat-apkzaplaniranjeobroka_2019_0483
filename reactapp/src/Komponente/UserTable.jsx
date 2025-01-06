@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UserTable.css';
+import UserStatsChart from './UserStatsChart';
 
 const UserTable = () => {
   const token = localStorage.getItem('token');
@@ -87,6 +88,7 @@ const UserTable = () => {
   return (
     <div className="user-table-container">
       <h2 className="user-table-title">Lista korisnika</h2>
+      <UserStatsChart></UserStatsChart>
       <table className="user-table">
         <thead>
           <tr>

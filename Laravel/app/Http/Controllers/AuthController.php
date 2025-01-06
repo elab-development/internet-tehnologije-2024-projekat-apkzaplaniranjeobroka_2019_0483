@@ -134,4 +134,24 @@ class AuthController extends Controller
              return response()->json(['message' => 'Error occurred while deleting user and plans.', 'error' => $e->getMessage()], 500);
          }
      }
+
+
+    public function getUserRegistrationStats()
+    {
+        $stats = User::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as count')
+            ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+            ->orderByRaw('YEAR(created_at), MONTH(created_at)')
+            ->get();
+
+        $formattedStats = $stats->map(function ($stat) {
+            return [
+                'year' => $stat->year,
+                'month' => $stat->month,
+                'count' => $stat->count,
+            ];
+        });
+
+        return response()->json($formattedStats, 200);
+    }
+
 }
