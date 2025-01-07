@@ -34,4 +34,31 @@
   .navbar-links a:hover {
     color: #f39c12;
   }
+
+
+
+
+
+
   
+  .breadcrumbs {
+    padding: 10px 20px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .breadcrumbs a {
+    color: #ff5c5c;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .breadcrumbs a:hover {
+    color: #ff2e2e;
+  }
+  
+  .breadcrumbs span {
+    color: #333;
+  }

@@ -12,7 +12,8 @@ import { useEffect, useState } from 'react';
 import TabelaRecepata from './Komponente/TabelaRecepata';
 import RecipeRecommendation from './Komponente/RecipeRecommendation';
 import UserTable from './Komponente/UserTable';
-
+import Breadcrumbs from './Komponente/Breadcrumbs';
+ 
 function App() {
   const { isLoggedIn, user, token } = useAuthStatus();
   const [authKey, setAuthKey] = useState(0); // Ključ za ponovno renderovanje aplikacije
@@ -24,6 +25,7 @@ function App() {
     <Router>
       <div className="App">
       <Navbar />
+      <Breadcrumbs></Breadcrumbs>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
