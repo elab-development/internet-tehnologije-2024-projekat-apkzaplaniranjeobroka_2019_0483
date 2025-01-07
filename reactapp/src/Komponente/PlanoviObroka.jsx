@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import usePlanoviObroka from './usePlanoviObroka';
@@ -117,6 +118,24 @@ const PlanoviObroka = () => {
     doc.save(`${selectedPlan.naziv}-shopping-lista.pdf`);
   };
 
+  const handleDeletePlan = async (planId) => {
+    if (!window.confirm('Da li ste sigurni da želite da obrišete ovaj plan obroka?')) return;
+
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/planovi-obroka/${planId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert('Plan obroka je uspešno obrisan.');
+      fetchPlanovi(); // Osvežavanje liste planova
+    } catch (error) {
+      console.error('Greška prilikom brisanja plana:', error);
+      alert('Došlo je do greške prilikom brisanja plana obroka.');
+    }
+  };
+
   return (
     <div className="planovi-container">
       <h1 className="planovi-title">Planovi obroka</h1>
@@ -142,7 +161,12 @@ const PlanoviObroka = () => {
       {!isLoading && planovi.length > 0 && (
         <div className="planovi-list">
           {planovi.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} onClick={() => handlePlanClick(plan)} />
+            <div key={plan.id} className="plan-card-wrapper">
+              <PlanCard plan={plan} onClick={() => handlePlanClick(plan)} />
+              <button className="delete-button" onClick={() => handleDeletePlan(plan.id)}>
+                Obriši
+              </button>
+            </div>
           ))}
         </div>
       )}

@@ -32,10 +32,10 @@ function App() {
           <Route path="/planiraj" element={<PlanoviObroka />} />     {/*za seminarski dopunjeno sa funkcionalnoscu za preuzimanje pdfa */}
           <Route path="/kreirajPlan" element={<KreirajPlanObroka />} />
 
-
+          <Route path="/recepti/preporuke" element={<RecipeRecommendation />} />
 
           <Route path="/recepti" element={<TabelaRecepata />} />
-          <Route path="/recepti/preporuke" element={<RecipeRecommendation />} />
+         
           <Route path="/users" element={<UserTable />} />
 
 

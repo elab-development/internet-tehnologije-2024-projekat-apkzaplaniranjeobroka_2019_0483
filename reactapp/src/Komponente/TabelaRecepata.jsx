@@ -115,7 +115,7 @@ const TabelaRecepata = () => {
 
   return (
     <div className="recepti-container">
-      <h1 className="recepti-title">Lista Recepata</h1>
+      <h1 className="recepti-title">Lista recepata</h1>
       <button className="create-recept-button" onClick={handleOpenModal}>
         Dodaj novi recept
       </button>

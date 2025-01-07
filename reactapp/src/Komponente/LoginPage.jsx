@@ -23,7 +23,7 @@ const LoginPage = ({ onLogin }) => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMessage('');
-
+  
     try {
       const response = await fetch('http://127.0.0.1:8000/api/login', {
         method: 'POST',
@@ -32,14 +32,14 @@ const LoginPage = ({ onLogin }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         setErrorMessage(data.message || 'Greška pri prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
-
+  
         // Čuvanje dijetetskih preferencija u localStorage
         if (data.user.dijetetske_preferencije) {
           localStorage.setItem(
@@ -47,14 +47,20 @@ const LoginPage = ({ onLogin }) => {
             JSON.stringify(data.user.dijetetske_preferencije)
           );
         }
-
+  
         // Pozivamo login funkciju sa tokenom i korisničkim podacima
         login(data.token, data.user);
-        navigate('/planiraj');
-
+  
+        // Provera uloge i preusmeravanje
+        if (data.user.role === 'admin') {
+          navigate('/recepti');
+        } else {
+          navigate('/planiraj');
+        }
+  
         // Čuvanje tokena u localStorage
         localStorage.setItem('token', data.token);
-
+  
         // Sačuvaj korisnika za brzi login ako je checkbox označen
         if (saveForQuickLogin) {
           const users = JSON.parse(localStorage.getItem('savedUsers')) || [];
@@ -71,15 +77,15 @@ const LoginPage = ({ onLogin }) => {
       setIsLoading(false);
     }
   };
-
+  
   const handleQuickLogin = async (userEmail, userPassword) => {
     setEmail(userEmail);
     setPassword(userPassword);
-
+  
     // Automatski poziv za prijavu
     setIsLoading(true);
     setErrorMessage('');
-
+  
     try {
       const response = await fetch('http://127.0.0.1:8000/api/login', {
         method: 'POST',
@@ -88,14 +94,14 @@ const LoginPage = ({ onLogin }) => {
         },
         body: JSON.stringify({ email: userEmail, password: userPassword }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
         setErrorMessage(data.message || 'Greška pri brzom prijavljivanju');
       } else {
         alert(`Uspešno ste prijavljeni kao: ${data.user.name}`);
-
+  
         // Čuvanje dijetetskih preferencija u localStorage
         if (data.user.dijetetske_preferencije) {
           localStorage.setItem(
@@ -103,9 +109,16 @@ const LoginPage = ({ onLogin }) => {
             JSON.stringify(data.user.dijetetske_preferencije)
           );
         }
-
+  
         login(data.token, data.user);
-        navigate('/planiraj');
+  
+        // Provera uloge i preusmeravanje
+        if (data.user.role === 'admin') {
+          navigate('/recepti');
+        } else {
+          navigate('/planiraj');
+        }
+  
         localStorage.setItem('token', data.token);
       }
     } catch (error) {
@@ -115,6 +128,7 @@ const LoginPage = ({ onLogin }) => {
     }
   };
 
+ 
   const handleRemoveUser = (userEmail) => {
     const updatedUsers = savedUsers.filter((user) => user.email !== userEmail);
     localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
