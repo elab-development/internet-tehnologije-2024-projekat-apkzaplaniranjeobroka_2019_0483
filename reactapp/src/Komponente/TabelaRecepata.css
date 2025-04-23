@@ -1,0 +1,205 @@
+.recepti-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .recepti-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ff5c5c;
+  }
+  
+  .loading-message,
+  .error-message,
+  .no-data-message {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .recepti-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .recepti-table th,
+  .recepti-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .recepti-table th {
+    background: #ff5c5c;
+    color: #fff;
+  }
+  
+  .recepti-table tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+  
+  .recepti-table tr:hover {
+    background: #f1f1f1;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+  }
+  
+  .submit-button,
+  .cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .submit-button {
+    background: #28a745;
+    color: white;
+  }
+  
+  .cancel-button {
+    background: #dc3545;
+    color: white;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Poluprozirna pozadina */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .modal-content form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .modal-content label {
+    align-self: flex-start;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  .modal-content input,
+  .modal-content textarea {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    resize: none;
+  }
+  
+  .modal-content .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .submit-button,
+  .cancel-button {
+    background: #ff5c5c;
+    border: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  
+  .submit-button:hover {
+    background: #ff2e2e;
+  }
+  
+  .cancel-button {
+    background: #ccc;
+    color: #333;
+  }
+  
+  .cancel-button:hover {
+    background: #bbb;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

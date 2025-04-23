@@ -1,0 +1,15 @@
+.chart-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .error-message {
+    color: #d9534f;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+  
