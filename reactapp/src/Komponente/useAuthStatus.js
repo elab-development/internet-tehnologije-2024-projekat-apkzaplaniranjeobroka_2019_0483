@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+ 
+import { useEffect, useState } from 'react';
 
 // Singleton za stanje autentifikacije
 const authState = {
@@ -10,6 +11,17 @@ const authState = {
     this.listeners.forEach((listener) => listener());
   },
 };
+
+// ucitava podatke iz localStorage (radi i na prvom renderu posle refresh-a)
+try {
+  const t = localStorage.getItem('token');
+  const u = localStorage.getItem('user');
+  if (t && u) {
+    authState.isLoggedIn = true;
+    authState.token = t;
+    authState.user = JSON.parse(u);
+  }
+} catch { /* ignore */ }
 
 const useAuthStatus = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(authState.isLoggedIn);
@@ -24,8 +36,23 @@ const useAuthStatus = () => {
 
   useEffect(() => {
     authState.listeners.add(updateState);
+
+    //  sync kad se localStorage promeni iz drugog taba
+    const onStorage = () => {
+      try {
+        const t = localStorage.getItem('token');
+        const u = localStorage.getItem('user');
+        authState.isLoggedIn = !!(t && u);
+        authState.token = t || null;
+        authState.user = u ? JSON.parse(u) : null;
+        authState.notify();
+      } catch {}
+    };
+    window.addEventListener('storage', onStorage);
+
     return () => {
       authState.listeners.delete(updateState);
+      window.removeEventListener('storage', onStorage);
     };
   }, []);
 
